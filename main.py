@@ -226,9 +226,7 @@ class Vybuch(pygame.sprite.Sprite):
             self.kill()
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  Pomocné funkce
-# ══════════════════════════════════════════════════════════════════════════════
 
 def generuj_hvezdy(pocet=130):
     """Vygeneruje seznam statických hvězd (x, y, polomer) – volá se jednou."""
@@ -291,14 +289,11 @@ def vykresli_tlacitko(text, rect, vybrano):
     screen.blit(surf, surf.get_rect(center=rect.center))
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  Předběžné načtení assetů (před hlavní smyčkou)
-# ══════════════════════════════════════════════════════════════════════════════
+#  Předběžné načtení assetů 
 
-Lod.nacti_vsechny()   # lodě načteme jednou – třídní atributy sdílejí všechny instance
+Lod.nacti_vsechny()   # lodě načteme jednou - třídní atributy sdílejí všechny instance
 hvezdy = generuj_hvezdy()
 
-# Splash image – nepovinná; pokud assets/splash.png chybí, nakreslíme vlastní
 splash_img    = None
 _splash_path  = path.join(ASSET_DIR, SPLASH_FILE)
 if path.exists(_splash_path):
@@ -306,9 +301,7 @@ if path.exists(_splash_path):
         pygame.image.load(_splash_path).convert(), (WIDTH, HEIGHT)
     )
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  Herní proměnné
-# ══════════════════════════════════════════════════════════════════════════════
 
 vybrana_lod = 0          # index aktivní lodi (0–3)
 lod         = Lod(vybrana_lod)
@@ -335,13 +328,11 @@ SPLASH_TRVANI    = 5000   # ms; splash zmizí automaticky nebo po stisku kláves
 
 running = True
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  Hlavní herní smyčka   EVENT → UPDATE → RENDER
-# ══════════════════════════════════════════════════════════════════════════════
 
 while running:
 
-    # ── EVENT – zpracování fronty událostí ───────────────────────────────────
+    # ── EVENT – zpracování fronty událostí 
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
@@ -353,7 +344,7 @@ while running:
 
         elif event.type == pygame.KEYDOWN:
 
-            # ── MENU: šipky navigují, ENTER vybírá ──────────────────────────
+            # ── MENU: šipky navigují, ENTER vybírá
             if stav == MENU:
                 if event.key == pygame.K_UP:
                     menu_vyber = (menu_vyber - 1) % len(MENU_POLOZKY)
@@ -408,12 +399,12 @@ while running:
                         lod.reset()
                         prekazky = vytvor_prekazky(level)  # přidají se i nové překážky
 
-            # ── GAME OVER: ENTER = zpět do menu ─────────────────────────────
+            # ── GAME OVER: ENTER = zpět do menu
             elif stav == GAMEOVER:
                 if event.key == pygame.K_RETURN:
                     stav = MENU
 
-    # ── UPDATE – herní logika a pohyb ────────────────────────────────────────
+    # ── UPDATE – herní logika a pohyb
 
     if stav == SPLASH:
         # pygame.time.get_ticks() vrací ms od spuštění pygame.init()
@@ -421,7 +412,7 @@ while running:
             stav = MENU
 
     elif stav == PLAYING:
-        prekazky.update(speed_mult)   # předáme speed_mult každé Prekazka.update()
+        prekazky.update(speed_mult)   
         hrac_grp.update()
         vybuch_grp.update()           # Vybuch.update() sám sebe odstraní po 500 ms
 
@@ -437,13 +428,12 @@ while running:
                 if zivoty <= 0:
                     stav = GAMEOVER
 
-    # ── RENDER – vykreslování ─────────────────────────────────────────────────
+    # ── RENDER – vykreslování
 
     if stav == SPLASH:
         if splash_img:
             screen.blit(splash_img, (0, 0))
         else:
-            # Vlastní splash pokud assets/splash.png chybí
             screen.fill(BG_COL)
             for x, y, r in hvezdy:
                 pygame.draw.circle(screen, WHITE, (x, y), r)
