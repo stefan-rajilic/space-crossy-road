@@ -1,10 +1,6 @@
 import pygame, sys, random
 from os import path
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  Konstanty – barvy, rozměry, FPS
-# ══════════════════════════════════════════════════════════════════════════════
-
 BLACK    = (0,   0,   0)
 WHITE    = (255, 255, 255)
 GRAY     = (120, 120, 140)
@@ -21,8 +17,8 @@ SEL_COL  = (160, 160, 190)    # text neaktivního tlačítka
 
 WIDTH, HEIGHT = 800, 600
 TILE          = 40
-COLS          = WIDTH  // TILE   # 20 sloupců
-ROWS          = HEIGHT // TILE   # 15 řádků
+COLS          = WIDTH  // TILE   
+ROWS          = HEIGHT // TILE  
 FPS           = 60
 
 START_COL    = COLS // 2
@@ -30,18 +26,15 @@ START_ROW    = ROWS - 1
 ZIVOTY_START = 3
 GRACE_PERIOD = 1500   # ms neporanitelnosti po zásahu
 
-# ── Jména souborů z kenney.nl/assets/space-shooter-remastered ───────────────
-# Stáhni balíček a přejmenuj soubory do složky assets/ vedle main.py:
+# Zdroj obrázků: kenney.nl/assets/space-shooter-remastered (licence součástí repozitáře)
 LOD_SOUBORY  = ["lod_1.png", "lod_2.png", "lod_3.png", "lod_4.png"]
 LOD_NAZVY    = ["Modrá",     "Červená",   "Zelená",    "Žlutá"]
-METEOR_BIG   = "meteor_1.png"   # velký meteorit
-METEOR_SMALL = "meteor_2.png"   # malý meteorit
-ENEMY_FILE   = "nepritel.png"   # nepřátelská loď = trosky satelitu
-VYBUCH_FILE  = "vybuch.png"     # efekt výbuchu při zásahu
-SPLASH_FILE  = "splash.png"     # volitelný úvodní obrázek (800×600)
+METEOR_BIG   = "meteor_1.png"  
+METEOR_SMALL = "meteor_2.png"   
+ENEMY_FILE   = "nepritel.png"  
+VYBUCH_FILE  = "vybuch.png"    
+SPLASH_FILE  = "splash.png"     
 
-# Definice vesmírných drah: (řádek, základní_rychlost, typ, základní_počet)
-# typ 0 = meteorit, typ 1 = trosky; kladná rychlost = zprava doleva
 PRUHY = [
     ( 1,  2.5, 0, 2),
     ( 2, -2.0, 1, 1),
@@ -65,10 +58,7 @@ SETTINGS = 2
 PLAYING  = 3
 GAMEOVER = 4
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  Inicializace Pygame
-# ══════════════════════════════════════════════════════════════════════════════
-
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Vesmírné Crossy Road")
@@ -93,9 +83,7 @@ font_big   = pygame.font.SysFont(None, 72)
 font_med   = pygame.font.SysFont(None, 42)
 font_small = pygame.font.SysFont(None, 28)
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  Třídy spritů
-# ══════════════════════════════════════════════════════════════════════════════
 
 class Lod(pygame.sprite.Sprite):
     """
@@ -164,7 +152,7 @@ class Prekazka(pygame.sprite.Sprite):
     Obrázky se načítají jednou do sdílené cache (_cache).
     """
 
-    _cache = {}   # (nazev, sirka, vyska) → Surface
+    _cache = {} 
 
     @classmethod
     def _ziskej(cls, nazev, w, h):
@@ -176,7 +164,7 @@ class Prekazka(pygame.sprite.Sprite):
 
     def __init__(self, radek, rychlost, typ):
         pygame.sprite.Sprite.__init__(self)
-        self.rychlost = rychlost   # px/snímek; záporná hodnota = zprava doleva
+        self.rychlost = rychlost  
 
         if typ == 0:
             nazev      = random.choice([METEOR_BIG, METEOR_SMALL])
@@ -185,7 +173,7 @@ class Prekazka(pygame.sprite.Sprite):
             self.image = Prekazka._ziskej(ENEMY_FILE, 48, 36)
 
         self.rect = self.image.get_rect()
-        w = self.rect.width   # šířka aktuálního obrázku – nutná pro výpočet X
+        w = self.rect.width  
 
         # Rovnoměrné rozložení přes celou šířku od začátku hry
         if rychlost > 0:
